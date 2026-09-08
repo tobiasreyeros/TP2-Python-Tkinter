@@ -14,8 +14,8 @@ from PIL import ImageTk, Image
 
 # ------------ INTERFAZ TKINTER ------------
 ventana = Tk()
-ventana.title("APLICACION DE MENSAJERIA")
-ventana.geometry("380x480")
+ventana.title("Enviar Gmail")
+ventana.geometry("360x480")
 ventana.resizable(0, 0)
 ventana.config(bd=10)
 
@@ -31,7 +31,7 @@ Label(
 # Imagen GMAIL (Punto 4b)
 try:
     imagen_gmail = Image.open(
-        "C:\Users\NET USO ESCOLAR 115\Documents\Repositorios\TP2-Python-Tkinter\ENVIAR_EMAIL"
+        "C:/Users/NET USO ESCOLAR 115/Documents/Repositorios/TP2-Python-Tkinter/ENVIAR_EMAIL/xd.jpg"
 )
     nueva_imagen = imagen_gmail.resize((125, 84))
     render = ImageTk.PhotoImage(nueva_imagen)
