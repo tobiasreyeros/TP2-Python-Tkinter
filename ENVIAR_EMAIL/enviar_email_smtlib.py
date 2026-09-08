@@ -53,12 +53,12 @@ lista_correos = [
     "docente2@gmail.com",  # Docente 2
     "mfedullo@gmail.com",  # Docente 3
     "elcrack35158@gmail.com",  # Compañero
-    "luisochoa.1495@gmail.com",  # Correo propio
+    "tobiastrabajo2@gmail.com",  # Correo propio
 ]
 opcion_seleccionada.set(lista_correos[0])
 
 # Mi correo configurado (Punto 4a)
-REMITENTE = "luisochoa.1495@gmail.com"
+REMITENTE = "tobiastrabajo2@gmail.com"
 
 Label(
     ventana,
