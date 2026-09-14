@@ -1,16 +1,20 @@
 """
 SMTP
 ¿Qué es y para qué sirve SMTP?
-SMTP, Simple Mail Transfer Protocol por sus siglas in inglés, es un protocolo o conjunto de reglas 
+SMTP, Simple Mail Transfer Protocol por sus siglas en inglés, es un protocolo o conjunto de reglas 
 de comunicación que utilizan los servidores de correo electrónico para enviar y recibir e-mails.
 """
 
-from email.message import EmailMessage  # Construir la estructura del email
-import smtplib  # Conectar con el servidor y enviarlo
+from email.message import EmailMessage
+import os
+import smtplib
 from tkinter import *
-from tkinter import messagebox
-# Python Image Library
+from tkinter import messagebox, simpledialog
 from PIL import ImageTk, Image
+from dotenv import load_dotenv  # Carga variables desde el archivo .env
+
+# Cargar variables del archivo .env local si existe
+load_dotenv()
 
 # ------------ INTERFAZ TKINTER ------------
 ventana = Tk()
@@ -28,7 +32,7 @@ Label(
     pady=5,
 ).grid(row=0, column=0, columnspan=2)
 
-# Imagen GMAIL (Punto 4b)
+# Imagen GMAIL
 try:
     imagen_gmail = Image.open(
         "C:/Users/NET USO ESCOLAR 115/Documents/Repositorios/TP2-Python-Tkinter/ENVIAR_EMAIL/xd.jpg"
@@ -47,21 +51,17 @@ except Exception:
 asunto = StringVar(ventana)
 opcion_seleccionada = StringVar(ventana)
 
-# Lista de destinatarios predefinidos (Punto 4c)
+# Lista de destinatarios predefinidos
 lista_correos = [
-    "fjcoronati@gmail.com",  # Docente 1 (profe del TP)
-    "docente2@gmail.com",  # Docente 2
-    "mfedullo@gmail.com",  # Docente 3
-    "elcrack35158@gmail.com",  # Compañero
-    "tobiastrabajo2@gmail.com",  # Correo propio
+    "fjcoronati@gmail.com",
+    "docente2@gmail.com",
+    "mfedullo@gmail.com",
+    "elcrack35158@gmail.com",
+    "tobiastrabajo2@gmail.com",
 ]
 opcion_seleccionada.set(lista_correos[0])
 
-# Mi correo configurado (Punto 4a)
 REMITENTE = "tobiastrabajo2@gmail.com"
-
-# Reemplaza los 16 caracteres de abajo por tu Contraseña de Aplicación de Google
-PASSWORD_APLICACION = ""
 
 Label(
     ventana,
@@ -73,7 +73,7 @@ Label(
     pady=5,
 ).grid(row=2, column=0, columnspan=2, pady=5)
 
-# Menú desplegable (OptionMenu)
+# Menú desplegable
 Label(
     ventana, text="Destinatario:", fg="black", font=("Arial", 10, "bold")
 ).grid(row=3, column=0)
@@ -100,14 +100,31 @@ mensaje.config(font=("Arial", 9))
 def enviar_email():
     correo_destino = opcion_seleccionada.get()
 
-    # Validar que los campos no estén vacíos
+    # Intentar obtener la clave desde el archivo .env o variables de entorno
+    app_password = os.getenv("GMAIL_APP_PASS")
+
+    # Si no se encuentra la clave en la PC actual, se solicita al usuario por pantalla
+    if not app_password:
+        app_password = simpledialog.askstring(
+            "Autenticación Requerida",
+            "Ingrese la Contraseña de Aplicación de Gmail para enviar:",
+            show="*",
+        )
+        if not app_password:
+            messagebox.showwarning(
+                "Envío cancelado",
+                "Es necesaria la contraseña de aplicación para realizar el envío.",
+            )
+            return
+
+    # Validar campos requeridos
     if not asunto.get().strip() or not mensaje.get(1.0, "end").strip():
         messagebox.showwarning(
             "Campos vacíos", "Por favor, completa el asunto y el mensaje."
         )
         return
 
-    # Estructura del email
+    # Estructura del correo
     email = EmailMessage()
     email["From"] = REMITENTE
     email["To"] = correo_destino
@@ -115,9 +132,9 @@ def enviar_email():
     email.set_content(str(mensaje.get(1.0, "end")))
 
     try:
-        # Envío de email mediante protocolo SMTP
+        # Conexión SMTP
         smtp = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-        smtp.login(REMITENTE, PASSWORD_APLICACION)
+        smtp.login(REMITENTE, app_password)
         smtp.send_message(email)
         smtp.quit()
         messagebox.showinfo("MENSAJERIA", "Mensaje enviado correctamente")
