@@ -6,8 +6,9 @@ de comunicación que utilizan los servidores de correo electrónico para enviar 
 """
 
 from email.message import EmailMessage  # Construir la estructura del email
-import os  # Para acceder a variables de entorno
+import os  # Para acceder a variables de entorno y rutas
 import smtplib  # Conectar con el servidor y enviarlo
+import sys  # Necesario para la compatibilidad con PyInstaller
 from tkinter import *
 from tkinter import messagebox, simpledialog
 from dotenv import load_dotenv  # Cargar variables desde archivo .env local
@@ -16,6 +17,16 @@ from PIL import ImageTk, Image
 
 # Cargar variables del archivo .env local si existe
 load_dotenv()
+
+
+# Función para obtener la ruta absoluta de recursos (soporta ejecución normal y .exe empaquetado)
+def obtener_ruta_recurso(ruta_relativa):
+    try:
+        ruta_base = sys._MEIPASS
+    except Exception:
+        ruta_base = os.path.abspath(".")
+    return os.path.join(ruta_base, ruta_relativa)
+
 
 # ------------ INTERFAZ TKINTER ------------
 ventana = Tk()
@@ -35,9 +46,8 @@ Label(
 
 # Imagen GMAIL (Punto 4b)
 try:
-    imagen_gmail = Image.open(
-        "C:/Users/NET USO ESCOLAR 115/Documents/Repositorios/TP2-Python-Tkinter/ENVIAR_EMAIL/xd.jpg"
-    )
+    ruta_imagen = obtener_ruta_recurso("xd.jpg")
+    imagen_gmail = Image.open(ruta_imagen)
     nueva_imagen = imagen_gmail.resize((125, 84))
     render = ImageTk.PhotoImage(nueva_imagen)
     label_imagen = Label(ventana, image=render)
@@ -51,7 +61,7 @@ except Exception:
 # Variables
 asunto = StringVar(ventana)
 destinatario_seleccionado = StringVar(ventana)
-remitente_input = StringVar(ventana, value="tobiastrabajo2@gmail.com")  # Valor por defecto
+remitente_input = StringVar(ventana, value="tobiastrabajo2@gmail.com")
 
 # Lista de destinatarios predefinidos (Punto 4c)
 lista_correos = [
