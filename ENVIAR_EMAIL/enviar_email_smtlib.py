@@ -1,7 +1,7 @@
 """
 SMTP
 ¿Qué es y para qué sirve SMTP?
-SMTP, Simple Mail Transfer Protocol por sus siglas en inglés, es un protocolo o conjunto de reglas 
+SMTP, Simple Mail Transfer Protocol por sus siglas in inglés, es un protocolo o conjunto de reglas 
 de comunicación que utilizan los servidores de correo electrónico para enviar y recibir e-mails.
 """
 
@@ -32,7 +32,7 @@ Label(
 try:
     imagen_gmail = Image.open(
         "C:/Users/NET USO ESCOLAR 115/Documents/Repositorios/TP2-Python-Tkinter/ENVIAR_EMAIL/xd.jpg"
-)
+    )
     nueva_imagen = imagen_gmail.resize((125, 84))
     render = ImageTk.PhotoImage(nueva_imagen)
     label_imagen = Label(ventana, image=render)
@@ -59,6 +59,9 @@ opcion_seleccionada.set(lista_correos[0])
 
 # Mi correo configurado (Punto 4a)
 REMITENTE = "tobiastrabajo2@gmail.com"
+
+# Reemplaza los 16 caracteres de abajo por tu Contraseña de Aplicación de Google
+PASSWORD_APLICACION = ""
 
 Label(
     ventana,
@@ -97,6 +100,13 @@ mensaje.config(font=("Arial", 9))
 def enviar_email():
     correo_destino = opcion_seleccionada.get()
 
+    # Validar que los campos no estén vacíos
+    if not asunto.get().strip() or not mensaje.get(1.0, "end").strip():
+        messagebox.showwarning(
+            "Campos vacíos", "Por favor, completa el asunto y el mensaje."
+        )
+        return
+
     # Estructura del email
     email = EmailMessage()
     email["From"] = REMITENTE
@@ -107,8 +117,7 @@ def enviar_email():
     try:
         # Envío de email mediante protocolo SMTP
         smtp = smtplib.SMTP_SSL("smtp.gmail.com", 465)
-        # Nota: "clave-personal" debe reemplazarse por una Contraseña de Aplicación de Gmail
-        smtp.login(REMITENTE, "clave-personal")
+        smtp.login(REMITENTE, PASSWORD_APLICACION)
         smtp.send_message(email)
         smtp.quit()
         messagebox.showinfo("MENSAJERIA", "Mensaje enviado correctamente")
