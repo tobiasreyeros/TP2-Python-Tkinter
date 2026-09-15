@@ -66,7 +66,7 @@ remitente_input = StringVar(ventana, value="tobiastrabajo2@gmail.com")
 # Lista de destinatarios predefinidos (Punto 4c)
 lista_correos = [
     "fjcoronati@gmail.com",  # Docente 1 (profe del TP)
-    "docente2@gmail.com",  # Docente 2
+    "lafortaleza246@gmail.com",  # Docente 2
     "mfedullo@gmail.com",  # Docente 3
     "elcrack35158@gmail.com",  # Compañero
     "tobiastrabajo2@gmail.com",  # Correo propio
